@@ -1,0 +1,56 @@
+cat('\n ** Starting .RProfile **\n')
+
+### aliases
+# .startup <- new.env() 
+#   assign('h', utils::head, env = .startup) 
+#   assign('n', base::names, env = .startup) 
+#   assign('ht', function(d, n = 5L, ...) rbind(head(d, n, ...), tail(d, n, ...)), env = .startup) 
+#   assign('s', base::summary, env = .startup) 
+# attach(.startup)
+
+# makeActiveBinding('.', function() .Last.value, env = .GlobalEnv)
+
+
+options(rstudio.markdownToHTML = 
+          function(inputFile, outputFile) {
+            require(markdown)
+            htmlOptions <- markdownHTMLOptions(defaults = TRUE)
+            
+            ## LibreOffice hangs when the png is included in the html file
+            ## must actively choose inline if you want the png to be inline
+            
+            ## switched from libreoffice so this is not needed:
+#             if (getOption('base64_images', 'No') != 'inline')
+#               htmlOptions <- htmlOptions[htmlOptions != 'base64_images']
+            
+            # Now in this section we skip writing to the outputfile
+            # and keep the markdown text in the md_txt variable
+            md_txt <- markdownToHTML(inputFile, options = htmlOptions,
+                                     stylesheet = ifelse(file.exists('~/knitr.css'),
+                                                         '~/knitr.css',
+                                                         getOption('markdown.HTML.stylesheet')))
+            
+            if (getOption('LibreOffice_adapt', 'Yes') == 'skip') {
+              writeLines(md_txt, con = outputFile)
+            } else {
+              # Annoyingly, it seems that Libre Office currently 'forgets' the 
+              # margin properties of the headers, we therefore substitute these
+              # with a element specific style option that works. Perhaps not 
+			  # that pretty but it works and can be tweaked for most things.
+              writeLines(
+                gsub('<h([0-9]+)>',
+                     "<h\\1 style = 'margin: 10pt 0pt 0pt 0pt;'>",
+                     gsub('<h1>',
+                          "<h1 style = 'margin: 24pt 0pt 0pt 0pt;'>",
+                          md_txt)),
+                con = outputFile)
+            }
+          }
+)
+
+
+# cat("\n * options(base64_images = 'inline') for knitr md png inside document")
+cat("\n * options(LibreOffice_adapt = 'skip') for no Libre Office adaptations")
+cat("\n * .css file being used is '~/knitr.css'")
+cat("\n * to use a custom .css for an Rmd, add the .css file to that directory\n")
+cat('\n ** End .RProfile **\n')
