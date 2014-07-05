@@ -4,7 +4,7 @@ output:
     css: ~/knitr.css
     fig_caption: yes
     highlight: default
-    keep_md: no
+    keep_md: yes
     number_sections: no
     theme: journal
     toc: no
