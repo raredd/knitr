@@ -1,0 +1,294 @@
+---
+output:
+  html_document:
+    css: ~/knitr.css
+    fig_caption: yes
+    highlight: default
+    keep_md: no
+    number_sections: no
+    theme: journal
+    toc: no
+---
+
+knitr skeleton
+
+```{r, echo = TRUE}
+## project directory
+projdir <- '~/Documents/r.packages/knitr/'
+```
+
+```{r, eval=FALSE}
+## knit in console:
+knitr::knit(paste0(projdir, 'knitr_skeleton.Rmd'), encoding = 'UTF-8')
+## convert to html
+knitr::knit2html(paste0(projdir, 'knitr_skeleton.Rmd'))
+## open in default browser
+browseURL(paste0(projdir, 'knitr_skeleton.html'))
+```
+
+```{r setup, include=FALSE}
+library(knitr)
+## package options
+opts_knit$set(eval.after = 'fig.cap', ## to use chunk calculations in the fig.cap,
+                                      ## evaluate captions after chunk
+              progress = TRUE, 
+              width = 80, 
+              verbose = TRUE, 
+              par = TRUE)
+              
+## global chunk options:
+opts_chunk$set(cache = FALSE, # cache chunks for faster compiles
+               tidy = FALSE, # respect code formatting
+               echo = TRUE,  # show/hide code
+               dev = 'CairoPNG',  # device options (install.packages('Cairo'))
+               dev.args = list(antialias = 'none',
+                               bg = 'transparent'), 
+               dpi = 96,
+               fig.path = 'figure/',   # default
+               cache.path = 'cache/',  # default
+               fig.align = 'center')
+## more http://yihui.name/knitr/options
+
+## customizable functions to run before/after a code chunk 
+## and tweak the output of knitr 
+## more info: http://yihui.name/knitr/hooks
+hook_fun <- function(FUN) function(x, options) FUN(x)
+knit_hooks$set(warning = hook_fun(warning), 
+               message = hook_fun(message), 
+               error = hook_fun(stop),
+               par = function(before, options, envir) {
+                 ## par settings
+                 # tune details of base graphics (http://yihui.name/knitr/hooks)
+                 if (before && options$fig.show != 'none') 
+                   par(mar = c(4,4,.1,.1), 
+                       cex.lab = .95,
+                       cex.axis = .9, 
+                       mgp = c(2,.7,0),
+                       tcl=-.3)
+                 },
+               plot = function(x, options) {
+                 ## plot settings
+                 fig_fn = paste0(opts_knit$get('base.url'),
+                                 paste(x, collapse = '.'))
+                 fig.cap <- knitr:::.img.cap(options)
+                 style = c('display:block',
+                           sprintf('margin: %s;',
+                                   switch(options$fig.align,
+                                          left = 'auto auto auto 0',
+                                          center = 'auto',
+                                          right = 'auto 0 auto auto')))
+                 addon_args <- ''
+                 fig_number_txt <- ''
+                 cntr <- getOption('figure_counter', FALSE)
+                 if (cntr != FALSE) {
+                   if (is.logical(cntr))
+                     cntr <- 1
+                   ## figure_counter_str allows for custom figure text, 
+                   ## eg, <b> Figure %s:</b>
+                   ## the %s allows for setting the counter manually to 1a, 1b, 
+                   ## etc if needed
+                   fig_number_txt <- 
+                     sprintf(getOption('figure_counter_str', 'Figure %s: '),
+                             ifelse(getOption('figure_counter_roman', FALSE),
+                                    as.character(as.roman(cntr)), 
+                                    as.character(cntr)))
+                   if (is.numeric(cntr))
+                     options(figure_counter = cntr + 1)
+                   }
+                 paste0("<figure><img src='", fig_fn, "'"," ", addon_args,
+                        paste0(" style='", paste(style, collapse = '; '), 
+                               "'"),'>',
+                        '<figcaption>', fig_number_txt, fig.cap, 
+                        '</figcaption></figure>')
+                 })
+
+## general settings 
+options(figure_counter = TRUE,
+        figure_counter_roman = TRUE,
+        LibreOffice_adapt = 'skip')
+
+## all packages to load:
+library(Gmisc)
+library(rawr)
+
+## fonts for images
+library(Cairo)
+CairoFonts(regular = 'Calirbi:style=Regular',
+           bold = 'Calirbi:style=Bold',
+           italic = 'Calibri:style=Italic',
+           bolditalic = 'Calibri:style=Bold Italic,BoldItalic',
+           symbol = 'Symbol')
+
+info <- sessionInfo()
+r_ver <- paste(info$R.version$major, info$R.version$minor, sep = '.')
+```
+
+<font align = center>
+
+#### knitr skeleton
+
+Description: a knitr template to use for reports.
+
+Most recent compile: `r as.character(format(Sys.Date(), format = '%d %B %Y'))`
+
+Department of Something<br />
+Some Place
+
+Statisticians:    
+Your Name, <a href="mailto:yourname@website.edu?subject=subject">email</a>
+
+</font>
+
+<font size = 1>
+All analyses were performed using `r R.Version()$version.string` and packages `Gmisc` v`r info$otherPkgs$Gmisc$Version` for table output ; `rawr` v`r info$otherPkgs$rawr$Version` ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and knitr v`r info$otherPkgs$knitr$Version` [Xie, 2013] for reproducible research.
+</font>
+
+#### Table of contents   
+\* [Outline](#outline)   
+\* [Introduction](#intro)    
+\* [Statistical methods](#stats)     
+\* [Results](#results)  
+\* [Discussion](#discuss)   
+\* [References](#ref)   
+
+----
+
+#### <a id = "outline">Outline</a>
+
+1. Item 1
+2. Item 2
+    + Item 2a
+    + Item 2b
+3. Item 3
+
+#### Abstract
+*PURPOSE:* This study has some purpose.
+*PATIENTS & METHODS:* We obtained some patients from somewhere, and some statistical things were done.
+*RESULTS:* There were some results that may be interesting.
+*CONCLUSION:* Conclude: it is as we said.
+
+#### <a id = 'intro'>Introduction</a>
+Description of the study. **Primary** objectives and **secondary** objectives.
+
+#### <a id = 'stats'>Statistical methods</a>
+We did some specific statistical methods.
+
+Analyses were performed using `r R.Version()$version.string`.
+
+#### <a id = 'results'>Results</a>
+Results go here.
+
+Table 1 shows the patient characteristics.
+
+```{r table 1, results='asis'}
+describeMedian_minmax <- function(...) describeMedian(..., iqr = FALSE)
+
+## t1 wrapper function 1
+getT1stat <- function(varname, digits = 0) {
+  getDescriptionStatsBy(data[ , varname],
+                        data$treat,
+                        add_total_col = TRUE, 
+                        show_all_values = TRUE,
+                        hrzl_prop = FALSE,
+                        statistics = FALSE,
+                        html = TRUE,
+                        digits = digits,
+                        continuous_fn = describeMedian_minmax)
+}
+
+## some sample data
+set.seed(1618)
+f <- function(...) sample(..., 100, replace = TRUE)
+data <- data.frame(age = rpois(100, 50),
+                   cat_var = f(LETTERS[1:5]),
+                   sex = f(c('Male','Female')),
+                   race = f(c('Black','White','Asian')),
+                   treat = factor(f(1:3), labels = c('Treatment A', 
+                                                     'Treatment B', 
+                                                     'Placebo')))
+data <- within(data, {
+  age_cat <- cut(age, c(-Inf, 40, 50, 60, Inf), labels = c('&le; 40','41 - 50',
+                                                           '51 - 60','60 +'))
+})
+
+## table 1 stats
+table_data <- list()
+table_data[['Age']] <- rbind(getT1stat('age', digits = 1),
+                             getT1stat('age_cat', digits = 1))
+table_data[['Some categorical<br>&nbsp;&nbsp;variable']] <- getT1stat('cat_var')
+table_data[['Sex']] <- getT1stat('sex')
+table_data[['Race']] <- getT1stat('race')
+
+## merge everything into a matrix 
+## (matrices are preferred since they allow for duplicated rownames)
+## create the rgroup & n.rgroup variables automatically
+output_data <- do.call(rbind, table_data)
+rgroup <- names(table_data)
+n.rgroup <- unname(sapply(rgroup, function(x) nrow(table_data[[x]])))
+
+# add a column spanner for the status columns
+cgroup <- c("", "Type of treatment<sup>&dagger;</sup>")
+n.cgroup <- c(1, 3) 
+colnames(output_data) <- 
+  c(paste0('Total<br><font weight = normal; size = 1>n = ',
+           nrow(data), '</font>'),
+    paste0('Treated A<br><font weight = normal; size = 1>n = ',
+           sum(data$treat == 'Treatment A'),'</font>'),
+    paste0('Treatment B<sup>&Dagger;</sup><br><font weight = normal; size = 1>n = ',
+           sum(data$treat == 'Treatment B'),'</font>'),
+    paste0('Placebo<br><font weight = normal; size = 1>n = ',
+           sum(data$treat == 'Placebo'),'</font>'))
+
+## create table with Gmisc package
+htmlTable(output_data, align = 'rccc',
+          rgroup = rgroup, n.rgroup = n.rgroup, 
+          rgroupCSSseparator = '', 
+          cgroup = cgroup,
+          n.cgroup = n.cgroup,
+          rowlabel = '', 
+          ctable = TRUE, # latex-style table lines
+          caption = "Table 1: Patient demographics", 
+          altcol = c('grey97', 'white'),
+          tfoot = paste0(
+            "<font size=1>Abbreviations: ECOG, Eastern Cooperative Oncology Group;
+            PS, performance score<br>
+            <sup>&dagger;</sup>Trial groups for a new wonder drug<br>
+            <sup>&Dagger;</sup> Twice the dosage of treatment A</font>"))
+```
+
+We can use an in-line chunk and caluclate the median age (`r median(data$age)`) without writing the number in myself! We define the median as
+
+$$\operatorname{P}(X\leq m) \geq \frac{1}{2}\text{ and }\operatorname{P}(X\geq m) \geq \frac{1}{2}$$ for any $m \in \mathbb{R}$.
+
+Here are some figures we generated.
+
+```{r plots, fig.cap='Some example plots', fig.height=5, fig.width=5}
+op <- par(no.readonly = TRUE)
+par(mar = c(3,3,2,1), oma = c(0,0,0,0),
+    mfrow = c(2,2), xpd = FALSE, 
+    cex.lab = .8, cex.main = .8, cex.axis = .8, las = 1)
+hist(mtcars$mpg)
+boxplot(mpg ~ cyl, data = mtcars)
+barplot(table(mtcars$am, mtcars$gear))
+plot(mtcars$mpg)
+
+fit <- lm(mpg ~ wt, data = mtcars)
+plot(fit, cex.id = .5, cex.caption = .8)
+```
+
+### <a id = 'discuss'>Discussion</a>
+Those were the results; now here are the implications.
+
+### <a id = 'ref'>References</a>
+Reference, First. "Article title." *Title of journal.* 2014.
+
+```{r, results='asis'}
+## packages
+print(citation(package = 'Gmisc'), style = 'html')
+## r citation
+print(citation(), style = 'html')
+```
+
+```{r, echo = TRUE}
+sessionInfo()
+```
