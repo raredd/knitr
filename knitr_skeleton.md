@@ -1,10 +1,20 @@
 
 knitr skeleton
 
+<font color = red>
+NOTES
+
+</font>
+
 
 ```r
 ## project directory
 projdir <- '~/Documents/r.packages/knitr/'
+
+
+## files: 
+## 00-master.Rmd
+## 00-surv.Rmd
 ```
 
 
@@ -23,7 +33,7 @@ browseURL(paste0(projdir, 'knitr_skeleton.html'))
 
 #### knitr skeleton
 
-Description: a knitr template to use for reports.
+Description: a knitr template to use for documents.
 
 Most recent compile: 13 July 2014
 
@@ -31,7 +41,7 @@ Department of Something
 Some Place
 
 Statisticians:    
-Your Name, <a href="mailto:yourname@website.edu?subject=subject">email</a>
+First Last, <a href="mailto:handle@site.edu?subject=subject">email address</a>
 
 </font>
 
@@ -547,6 +557,8 @@ R Foundation for Statistical Computing, Vienna, Austria.
 <a href="http://www.R-project.org/">http://www.R-project.org/</a>. 
 </p>
 
+---
+
 
 ```r
 sessionInfo()
@@ -573,3 +585,5 @@ sessionInfo()
 ##  [7] RColorBrewer_1.0-5  rmarkdown_0.2.49    sp_1.0-15          
 ## [10] stringr_0.6.2       tools_3.1.1         yaml_2.1.13
 ```
+
+
