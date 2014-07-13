@@ -12,9 +12,19 @@ output:
 
 knitr skeleton
 
+<font color = red>
+NOTES
+
+</font>
+
 ```{r, echo = TRUE}
 ## project directory
 projdir <- '~/Documents/r.packages/knitr/'
+
+
+## files: 
+## 00-master.Rmd
+## 00-surv.Rmd
 ```
 
 ```{r, eval=FALSE}
@@ -27,8 +37,8 @@ browseURL(paste0(projdir, 'knitr_skeleton.html'))
 ```
 
 ```{r setup, include=FALSE}
-library(knitr)
 ## package options
+library(knitr)
 opts_knit$set(eval.after = 'fig.cap', ## to use chunk calculations in the fig.cap,
                                       ## evaluate captions after chunk
               progress = TRUE, 
@@ -46,17 +56,15 @@ opts_chunk$set(cache = FALSE, # cache chunks for faster compiles
                dpi = 96,
                fig.path = 'figure/',   # default
                cache.path = 'cache/',  # default
-               fig.align = 'center')
+               fig.align = 'center',
+               warning = TRUE, 
+               message = TRUE)
 ## more http://yihui.name/knitr/options
 
 ## customizable functions to run before/after a code chunk 
 ## and tweak the output of knitr 
 ## more info: http://yihui.name/knitr/hooks
-hook_fun <- function(FUN) function(x, options) FUN(x)
-knit_hooks$set(warning = hook_fun(warning), 
-               message = hook_fun(message), 
-               error = hook_fun(stop),
-               par = function(before, options, envir) {
+knit_hooks$set(par = function(before, options, envir) {
                  ## par settings
                  # tune details of base graphics (http://yihui.name/knitr/hooks)
                  if (before && options$fig.show != 'none') 
@@ -104,12 +112,7 @@ knit_hooks$set(warning = hook_fun(warning),
 
 ## general settings 
 options(figure_counter = TRUE,
-        figure_counter_roman = TRUE,
-        LibreOffice_adapt = 'skip')
-
-## all packages to load:
-library(Gmisc)
-library(rawr)
+        figure_counter_roman = TRUE)
 
 ## fonts for images
 library(Cairo)
@@ -121,26 +124,68 @@ CairoFonts(regular = 'Calirbi:style=Regular',
 
 info <- sessionInfo()
 r_ver <- paste(info$R.version$major, info$R.version$minor, sep = '.')
+
+## table/figure counter and anchor formatter
+#
+## inc_num('table') or inc_num('figure') to increase the counter
+## after each table or figure made
+#
+## get_num('table') or get_num('figure') to get the current number
+## figure defaults to current roman option
+## use link = '...' to link to anchor ... 
+## link defaults to t1 or f1 for table or figure + current number
+
+figurenum_ <- 1
+tablenum_ <- 1
+
+inc_num <- function(which = c('table','figure')) {
+  if (which == 'table')
+    tablenum_ <<- tablenum_ + 1
+  if (which == 'figure')
+    figurenum_ <<- figurenum_ + 1
+}
+
+get_num <- function(which = c('table','figure'), link = NULL, 
+                    roman = getOption('figure_counter_roman')) {
+  upcase <- function(x) 
+    paste0(toupper(substr(x, 1, 1)), substring(x, 2), collapse = ' ')
+  num <- ifelse(which %in% 'table', tablenum_, figurenum_)
+  alink <- sprintf('%s%s', ifelse(which == 'table', 't', 'f'), num)
+  if (which == 'figure' && roman) 
+    num <- as.roman(num)
+  zzz <- sprintf('%s %s', upcase(which), num)
+  if (!is.null(link)) {
+    if (is.logical(link) && link)
+      sprintf('[%s](#%s)', zzz, alink)
+    else 
+      sprintf('[%s](#%s)', zzz, link)
+  }
+  else zzz
+}
+
+## all packages to load:
+library(Gmisc)
+library(rawr)
 ```
 
 <font align = center>
 
 #### knitr skeleton
 
-Description: a knitr template to use for reports.
+Description: a knitr template to use for documents.
 
 Most recent compile: `r as.character(format(Sys.Date(), format = '%d %B %Y'))`
 
-Department of Something<br />
+Department of Something   
 Some Place
 
 Statisticians:    
-Your Name, <a href="mailto:yourname@website.edu?subject=subject">email</a>
+First Last, <a href="mailto:handle@site.edu?subject=subject">email address</a>
 
 </font>
 
 <font size = 1>
-All analyses were performed using `r R.Version()$version.string` and packages `Gmisc` v`r info$otherPkgs$Gmisc$Version` for table output ; `rawr` v`r info$otherPkgs$rawr$Version` ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and knitr v`r info$otherPkgs$knitr$Version` [Xie, 2013] for reproducible research.
+All analyses were performed using `r R.Version()$version.string` and packages `Gmisc` v`r info$otherPkgs$Gmisc$Version` for table output ; `rawr` v`r info$otherPkgs$rawr$Version` ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and `knitr` v`r info$otherPkgs$knitr$Version` [Xie, 2013] for reproducible research.
 </font>
 
 #### Table of contents   
@@ -155,11 +200,16 @@ All analyses were performed using `r R.Version()$version.string` and packages `G
 
 #### <a id = "outline">Outline</a>
 
-1. Item 1
-2. Item 2
-    + Item 2a
-    + Item 2b
-3. Item 3
+1. Abstract
+2. Intro
+3. Stats
+4. Results
+    + Table 1
+    + Table 2
+    + Figure 1
+    + Figure 2
+5. Discussion 
+6. References
 
 #### Abstract
 *PURPOSE:* This study has some purpose.
@@ -178,8 +228,9 @@ Analyses were performed using `r R.Version()$version.string`.
 #### <a id = 'results'>Results</a>
 Results go here.
 
-Table 1 shows the patient characteristics.
+`r get_num('table', link = TRUE)` shows the patient characteristics.
 
+<a id='t1'></a>
 ```{r table 1, results='asis'}
 describeMedian_minmax <- function(...) describeMedian(..., iqr = FALSE)
 
@@ -239,7 +290,9 @@ colnames(output_data) <-
     paste0('Placebo<br><font weight = normal; size = 1>n = ',
            sum(data$treat == 'Placebo'),'</font>'))
 
+
 ## create table with Gmisc package
+inc_num('table')
 htmlTable(output_data, align = 'rccc',
           rgroup = rgroup, n.rgroup = n.rgroup, 
           rgroupCSSseparator = '', 
@@ -260,20 +313,39 @@ We can use an in-line chunk and caluclate the median age (`r median(data$age)`) 
 
 $$\operatorname{P}(X\leq m) \geq \frac{1}{2}\text{ and }\operatorname{P}(X\geq m) \geq \frac{1}{2}$$ for any $m \in \mathbb{R}$.
 
-Here are some figures we generated.
+Here are some figures we generated in `r get_num('figure', link = TRUE, roman = TRUE)`.
 
-```{r plots, fig.cap='Some example plots', fig.height=5, fig.width=5}
+<a id='f1'></a>
+```{r f1, fig.cap='Some example plots', fig.height=5, fig.width=5}
 op <- par(no.readonly = TRUE)
 par(mar = c(3,3,2,1), oma = c(0,0,0,0),
     mfrow = c(2,2), xpd = FALSE, 
     cex.lab = .8, cex.main = .8, cex.axis = .8, las = 1)
+inc_num('figure')
 hist(mtcars$mpg)
 boxplot(mpg ~ cyl, data = mtcars)
 barplot(table(mtcars$am, mtcars$gear))
 plot(mtcars$mpg)
+```
 
+As we saw in Figure `r I(figurenum_ - 1)`, something something, and we can also see in `r get_num('figure', link = TRUE, roman = TRUE)`, something.
+
+<a id='f2'></a>
+```{r f2, fig.cap='Some example plots', fig.height=5, fig.width=5}
+par(mar = c(3,3,2,1), oma = c(0,0,0,0),
+    mfrow = c(2,2), xpd = FALSE, 
+    cex.lab = .8, cex.main = .8, cex.axis = .8, las = 1)
 fit <- lm(mpg ~ wt, data = mtcars)
+inc_num('figure')
 plot(fit, cex.id = .5, cex.caption = .8)
+```
+
+And we will also check the table counter in `r get_num('table', link = TRUE)`.
+
+<a id='t2'></a>
+```{r t2, results='asis'}
+inc_num('table')
+htmlTable(mtcars[1:10, ], caption = 'Table 2: Some table.')
 ```
 
 ### <a id = 'discuss'>Discussion</a>
@@ -289,6 +361,22 @@ print(citation(package = 'Gmisc'), style = 'html')
 print(citation(), style = 'html')
 ```
 
+---
+
 ```{r, echo = TRUE}
 sessionInfo()
+```
+
+```{r copy, include = FALSE, cache = FALSE, eval = FALSE}
+## have file save itself to report directory named as current day/month/year
+pathr <- paste0(projdir, '00-master.Rmd')
+pathh <- paste0(projdir, '00-master.html')
+path_newr <- paste0(projdir, 'reports/',
+                    paste(as.character(format(Sys.Date(), format = '%d%b%Y'))),
+                    '.Rmd')
+path_newh <- paste0(projdir, 'reports/',
+                    paste(as.character(format(Sys.Date(), format = '%d%b%Y'))),
+                    '.html')
+file.copy(pathr, path_newr, overwrite = TRUE)
+file.copy(pathh, path_newh, overwrite = TRUE)
 ```
