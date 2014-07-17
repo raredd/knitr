@@ -1,31 +1,28 @@
 
 knitr skeleton
 
-<font color = red>
-NOTES
-
-</font>
-
 
 ```r
 ## project directory
 projdir <- '~/Documents/r.packages/knitr/'
+filename <- 'knitr_skeleton'
 
 
 ## files: 
 ## 00-master.Rmd
 ## 00-surv.Rmd
+
+## all packages to load:
+library(knitr)
+library(Gmisc)
+library(rawr)
 ```
 
+<font color = red>
+NOTES:    
+some things to do
 
-```r
-## knit in console:
-knitr::knit(paste0(projdir, 'knitr_skeleton.Rmd'), encoding = 'UTF-8')
-## convert to html
-knitr::knit2html(paste0(projdir, 'knitr_skeleton.Rmd'))
-## open in default browser
-browseURL(paste0(projdir, 'knitr_skeleton.html'))
-```
+</font>
 
 
 
@@ -35,7 +32,7 @@ browseURL(paste0(projdir, 'knitr_skeleton.html'))
 
 Description: a knitr template to use for documents.
 
-Most recent compile: 13 July 2014
+Most recent compile: 17 July 2014
 
 Department of Something   
 Some Place
@@ -43,11 +40,10 @@ Some Place
 Statisticians:    
 First Last, <a href="mailto:handle@site.edu?subject=subject">email address</a>
 
-</font>
-
 <font size = 1>
-All analyses were performed using R version 3.1.1 (2014-07-10) and packages `Gmisc` v for table output ; `rawr` v ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and `knitr` v1.6 [Xie, 2013] for reproducible research.
-</font>
+All analyses were performed using R version 3.1.1 (2014-07-10) and packages `Gmisc` v0.6.4 for table output ; `rawr` v0.2.2 ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and `knitr` v1.6 [Xie, 2013] for reproducible research.
+
+</font></font>
 
 #### Table of contents   
 \* [Outline](#outline)   
@@ -65,10 +61,10 @@ All analyses were performed using R version 3.1.1 (2014-07-10) and packages `Gmi
 2. Intro
 3. Stats
 4. Results
-    + Table 1
-    + Table 2
-    + Figure 1
-    + Figure 2
+    + [Table 1: Patient demographics.](#t1)    
+    + [Table 2: Some table.](#t2)    
+    + [Figure 1: Some example plots.](#f1)   
+    + [Figure 2: Some more example plots.](#f2)   
 5. Discussion 
 6. References
 
@@ -339,11 +335,12 @@ hist(mtcars$mpg)
 boxplot(mpg ~ cyl, data = mtcars)
 barplot(table(mtcars$am, mtcars$gear))
 plot(mtcars$mpg)
+box('outer')
 ```
 
 <figure><img src='figure/f1.png'  style='display:block; margin: auto;'><figcaption>Figure I: Some example plots</figcaption></figure>
 
-As we saw in Figure 1, something something, and we can also see in [Figure II](#f2), something.
+As we saw in Figure I, something something, and we can also see in [Figure II](#f2), something.
 
 <a id='f2'></a>
 
@@ -354,6 +351,7 @@ par(mar = c(3,3,2,1), oma = c(0,0,0,0),
 fit <- lm(mpg ~ wt, data = mtcars)
 inc_num('figure')
 plot(fit, cex.id = .5, cex.caption = .8)
+box('outer')
 ```
 
 <figure><img src='figure/f2.png'  style='display:block; margin: auto;'><figcaption>Figure II: Some example plots</figcaption></figure>
@@ -576,8 +574,8 @@ sessionInfo()
 ## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] rawr_0.2.1      Gmisc_0.6.4     Hmisc_3.14-4    Formula_1.1-1  
-## [5] survival_2.37-7 lattice_0.20-29 Cairo_1.5-5     knitr_1.6      
+## [1] Cairo_1.5-5     rawr_0.2.2      Gmisc_0.6.4     Hmisc_3.14-4   
+## [5] Formula_1.1-1   survival_2.37-7 lattice_0.20-29 knitr_1.6      
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] cluster_1.15.2      digest_0.6.4        evaluate_0.5.5     
@@ -587,3 +585,13 @@ sessionInfo()
 ```
 
 
+
+
+```r
+## knit in console:
+knitr::knit(sprintf('%s%s.Rmd', projdir, filename), encoding = 'UTF-8')
+## convert to html
+knitr::knit2html(sprintf('%s%s.Rmd', projdir, filename))
+## open in default browser
+browseURL(sprintf('%s%s.html', projdir, filename))
+```

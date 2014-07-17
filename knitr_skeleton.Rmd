@@ -12,34 +12,31 @@ output:
 
 knitr skeleton
 
-<font color = red>
-NOTES
-
-</font>
-
-```{r, echo = TRUE}
+```{r setup, echo = TRUE, message=FALSE}
 ## project directory
 projdir <- '~/Documents/r.packages/knitr/'
+filename <- 'knitr_skeleton'
 
 
 ## files: 
 ## 00-master.Rmd
 ## 00-surv.Rmd
-```
 
-```{r, eval=FALSE}
-## knit in console:
-knitr::knit(paste0(projdir, 'knitr_skeleton.Rmd'), encoding = 'UTF-8')
-## convert to html
-knitr::knit2html(paste0(projdir, 'knitr_skeleton.Rmd'))
-## open in default browser
-browseURL(paste0(projdir, 'knitr_skeleton.html'))
-```
-
-```{r setup, include=FALSE}
-## package options
+## all packages to load:
 library(knitr)
-opts_knit$set(eval.after = 'fig.cap', ## to use chunk calculations in the fig.cap,
+library(Gmisc)
+library(rawr)
+```
+
+<font color = red>
+NOTES:    
+some things to do
+
+</font>
+
+```{r knitr, include=FALSE}
+## package options
+opts_knit$set(eval.after = 'fig.cap', ## to use chunk results in the fig.cap,
                                       ## evaluate captions after chunk
               progress = TRUE, 
               width = 80, 
@@ -47,18 +44,18 @@ opts_knit$set(eval.after = 'fig.cap', ## to use chunk calculations in the fig.ca
               par = TRUE)
               
 ## global chunk options:
-opts_chunk$set(cache = FALSE, # cache chunks for faster compiles
-               tidy = FALSE, # respect code formatting
-               echo = TRUE,  # show/hide code
+opts_chunk$set(warning = TRUE, 
+               message = TRUE,
+               cache = FALSE,     # cache chunks for faster compiles
+               tidy = FALSE,      # respect code formatting
+               echo = TRUE,       # show/hide code
                dev = 'CairoPNG',  # device options (install.packages('Cairo'))
                dev.args = list(antialias = 'none',
                                bg = 'transparent'), 
                dpi = 96,
                fig.path = 'figure/',   # default
                cache.path = 'cache/',  # default
-               fig.align = 'center',
-               warning = TRUE, 
-               message = TRUE)
+               fig.align = 'center')
 ## more http://yihui.name/knitr/options
 
 ## customizable functions to run before/after a code chunk 
@@ -122,18 +119,15 @@ CairoFonts(regular = 'Calirbi:style=Regular',
            bolditalic = 'Calibri:style=Bold Italic,BoldItalic',
            symbol = 'Symbol')
 
-info <- sessionInfo()
-r_ver <- paste(info$R.version$major, info$R.version$minor, sep = '.')
-
 ## table/figure counter and anchor formatter
 #
 ## inc_num('table') or inc_num('figure') to increase the counter
 ## after each table or figure made
 #
 ## get_num('table') or get_num('figure') to get the current number
-## figure defaults to current roman option
-## use link = '...' to link to anchor ... 
-## link defaults to t1 or f1 for table or figure + current number
+## figure defaults to options('figure_counter_roman')
+## use link = 'link1' to link to anchor 'link1' 
+## link defaults to t1 or f1 for table or figure + respective count
 
 figurenum_ <- 1
 tablenum_ <- 1
@@ -162,10 +156,6 @@ get_num <- function(which = c('table','figure'), link = NULL,
   }
   else zzz
 }
-
-## all packages to load:
-library(Gmisc)
-library(rawr)
 ```
 
 <font align = center>
@@ -182,11 +172,10 @@ Some Place
 Statisticians:    
 First Last, <a href="mailto:handle@site.edu?subject=subject">email address</a>
 
-</font>
-
 <font size = 1>
-All analyses were performed using `r R.Version()$version.string` and packages `Gmisc` v`r info$otherPkgs$Gmisc$Version` for table output ; `rawr` v`r info$otherPkgs$rawr$Version` ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and `knitr` v`r info$otherPkgs$knitr$Version` [Xie, 2013] for reproducible research.
-</font>
+All analyses were performed using `r R.Version()$version.string` and packages `Gmisc` v`r packageVersion('Gmisc')` for table output ; `rawr` v`r packageVersion('rawr')` ([source](https://github.com/raredd/rawr)), a personal package with helper tools; and `knitr` v`r packageVersion('knitr')` [Xie, 2013] for reproducible research.
+
+</font></font>
 
 #### Table of contents   
 \* [Outline](#outline)   
@@ -204,10 +193,10 @@ All analyses were performed using `r R.Version()$version.string` and packages `G
 2. Intro
 3. Stats
 4. Results
-    + Table 1
-    + Table 2
-    + Figure 1
-    + Figure 2
+    + [Table 1: Patient demographics.](#t1)    
+    + [Table 2: Some table.](#t2)    
+    + [Figure 1: Some example plots.](#f1)   
+    + [Figure 2: Some more example plots.](#f2)   
 5. Discussion 
 6. References
 
@@ -326,9 +315,10 @@ hist(mtcars$mpg)
 boxplot(mpg ~ cyl, data = mtcars)
 barplot(table(mtcars$am, mtcars$gear))
 plot(mtcars$mpg)
+box('outer')
 ```
 
-As we saw in Figure `r I(figurenum_ - 1)`, something something, and we can also see in `r get_num('figure', link = TRUE, roman = TRUE)`, something.
+As we saw in Figure `r as.character(as.roman(figurenum_ - 1))`, something something, and we can also see in `r get_num('figure', link = TRUE, roman = TRUE)`, something.
 
 <a id='f2'></a>
 ```{r f2, fig.cap='Some example plots', fig.height=5, fig.width=5}
@@ -338,6 +328,7 @@ par(mar = c(3,3,2,1), oma = c(0,0,0,0),
 fit <- lm(mpg ~ wt, data = mtcars)
 inc_num('figure')
 plot(fit, cex.id = .5, cex.caption = .8)
+box('outer')
 ```
 
 And we will also check the table counter in `r get_num('table', link = TRUE)`.
@@ -369,14 +360,23 @@ sessionInfo()
 
 ```{r copy, include = FALSE, cache = FALSE, eval = FALSE}
 ## have file save itself to report directory named as current day/month/year
-pathr <- paste0(projdir, '00-master.Rmd')
-pathh <- paste0(projdir, '00-master.html')
-path_newr <- paste0(projdir, 'reports/',
-                    paste(as.character(format(Sys.Date(), format = '%d%b%Y'))),
-                    '.Rmd')
-path_newh <- paste0(projdir, 'reports/',
-                    paste(as.character(format(Sys.Date(), format = '%d%b%Y'))),
-                    '.html')
+pathr <- sprintf('%s%s.Rmd', projdir, filename)
+pathh <- sprintf('%s%s.html', projdir, filename)
+path_newr <- sprintf('%sreports/%s.Rmd',
+                     projdir,
+                     as.character(format(Sys.Date(), format = '%d%b%Y')))
+path_newh <- sprintf('%sreports/%s.html',
+                     projdir,
+                     as.character(format(Sys.Date(), format = '%d%b%Y')))
 file.copy(pathr, path_newr, overwrite = TRUE)
 file.copy(pathh, path_newh, overwrite = TRUE)
+```
+
+```{r, eval=FALSE}
+## knit in console:
+knitr::knit(sprintf('%s%s.Rmd', projdir, filename), encoding = 'UTF-8')
+## convert to html
+knitr::knit2html(sprintf('%s%s.Rmd', projdir, filename))
+## open in default browser
+browseURL(sprintf('%s%s.html', projdir, filename))
 ```
