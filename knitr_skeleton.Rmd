@@ -23,7 +23,6 @@ filename <- 'knitr_skeleton'
 ## 00-surv.Rmd
 
 ## all packages to load:
-library(knitr)
 library(Gmisc)
 library(rawr)
 ```
@@ -35,6 +34,7 @@ some things to do
 </font>
 
 ```{r knitr, include=FALSE}
+library(knitr)
 ## package options
 opts_knit$set(eval.after = 'fig.cap', ## to use chunk results in the fig.cap,
                                       ## evaluate captions after chunk

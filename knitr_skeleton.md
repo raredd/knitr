@@ -13,7 +13,6 @@ filename <- 'knitr_skeleton'
 ## 00-surv.Rmd
 
 ## all packages to load:
-library(knitr)
 library(Gmisc)
 library(rawr)
 ```
@@ -574,8 +573,8 @@ sessionInfo()
 ## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] Cairo_1.5-5     rawr_0.2.2      Gmisc_0.6.4     Hmisc_3.14-4   
-## [5] Formula_1.1-1   survival_2.37-7 lattice_0.20-29 knitr_1.6      
+## [1] Cairo_1.5-5     knitr_1.6       rawr_0.2.2      Gmisc_0.6.4    
+## [5] Hmisc_3.14-4    Formula_1.1-1   survival_2.37-7 lattice_0.20-29
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] cluster_1.15.2      digest_0.6.4        evaluate_0.5.5     
