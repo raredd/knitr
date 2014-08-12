@@ -1,48 +1,18 @@
+body, td {
+  font-family: "Calibri";
+  !background-color: white; !this needs to be commented out for custom colors;
+  font-size: 13px;
+  !font: 11pt;
+}
+
 body {
-  background-color: #fff;
+  font-family: Calibri;
   color: #000000;
-  margin: 0 auto;
-  max-width: 800px;
-  float: center;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: visible;
-}
-
-body #header {
-    clear: both;
-    margin-bottom: 8px;
-    border-bottom: 2px solid #999;
-    font-size: 20px;
-    padding: 2px 10px 2px 25px;
-}
-
-body #content {
-    background-color: white;
-    clear: both;
-    float: left;
-    overflow: visible;
-    padding: 10px;
-    border: 1px solid #BBBBBB;
-    border-radius: 5px;
-    width: 780px;
-}
-
-body #footer {
-    background-color: #99BBDD;
-    clear: both;
-    float: left;
-    margin: 8px 0;
-    border: 1px solid #6688AA;
-    border-radius: 5px;
-    padding: 0 10px;
-    width: 780px;
-  }
-body .clear {
-  clear: both;
-  border-width: 0;
-  margin: 0;
-  visibility: hidden;
+  font: 11pt;
+  max-width: 55em;
+  margin: auto;
+  padding: 1em;
+  !line-height: 20px;
 }
 
 #TOC {
@@ -97,6 +67,13 @@ td {
 p {
   margin-left: 15px;
   margin-bottom: 5px;
+  !text-align: justify;
+}
+section #heading {
+  float: none;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  text-align: center;
 }
 
 blockquote {
@@ -137,13 +114,15 @@ code {
   padding: 0px;
 }
 
+/* in-line r */
 p > code, li > code {
-  color: #333;
+  color: #900;
   border: 1px solid #ddd;
   border-radius: 3px;
   background-color: #f8f8f8;
-  font-size: 80%;
+  font-size: 90%;
   padding: 0px 2px;
+  font-weight: 400;
 }
 
 /*
@@ -176,15 +155,6 @@ img {
   box-shadow: 2px 2px 12px -5px #999999;
   margin: 0 5px;
 }
-
-body {
-  font-family: "Arial", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  line-height: 22px;
-}
-  body #header {
-  }
-
 
 h1 {
   margin-top: 0;
@@ -221,19 +191,19 @@ h5, h6 {
 }
 
 a {
-  color: #0033dd;
-  text-decoration: none;
+  color: #7f7f7f;
+  text-decoration: underline dotted;
 }
   a:hover {
-    color: #6666ff; }
+    color: #7f7f7f; }
   a:visited {
-    color: #800080; }
+    color: #7f7f7f; }
   a:visited:hover {
-    color: #BB00BB; }
+    color: #7f7f7f; }
   a[href^="http:"] {
-    text-decoration: underline; }
+    text-decoration: underline dotted; }
   a[href^="https:"] {
-    text-decoration: underline; }
+    text-decoration: underline dotted; }
 
 dl dt {
   font-weight: bold;
@@ -242,19 +212,19 @@ dl dt {
 
 pre .operator,
 pre .paren {
-  color: #888;
+  color: #000000;
 }
 
 pre .literal {
- color: #990073;
+ color: #cd661d;
 }
 
 pre .number {
- color: #0080C0;
+ color: #cd661d;
 }
 
 pre .comment {
- color: #008000;
+ color: #7f7f7f;
  font-style: italic
 }
 
@@ -268,7 +238,7 @@ pre .identifier {
 }
 
 pre .string {
- color: #b44;
+ color: #458b00;
 }
 
 
