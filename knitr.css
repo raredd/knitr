@@ -15,38 +15,7 @@ body {
   !line-height: 20px;
 }
 
-#TOC {
-  clear: both;
-  margin: 0 0 10px 10px;
-  padding: 4px;
-  width: 400px;
-  border: 1px solid #CCCCCC;
-  border-radius: 5px;
-
-  background-color: #f6f6f6;
-  font-size: 13px;
-  line-height: 16px;
-}
-  #TOC .toctitle {
-    font-weight: bold;
-    font-size: 15px;
-    margin-left: 5px;
-  }
-
-  #TOC ul {
-    padding-left: 40px;
-    margin-left: -1.5em;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  #TOC ul ul {
-    margin-left: -2em;
-  }
-  #TOC li {
-    line-height: 16px;
-  }
-
-table{
+table {
   margin: auto;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -68,12 +37,6 @@ p {
   margin-left: 15px;
   margin-bottom: 5px;
   !text-align: justify;
-}
-section #heading {
-  float: none;
-  margin-left: 15px;
-  margin-bottom: 5px;
-  text-align: center;
 }
 
 blockquote {
@@ -150,10 +113,61 @@ img {
   background-color: #FFFFFF;
   padding: 2px;
   !border: 1px solid #DDDDDD;
-  border-radius: 3px;
-  !border: 1px solid #CCCCCC;
+  !border-radius: 3px;
   box-shadow: 2px 2px 12px -5px #999999;
-  margin: 0 5px;
+  margin: auto;
+  max-width: 75em;
+  max-height: 75em;
+}
+
+a {
+  color: #7f7f7f;
+  text-decoration: underline dotted;
+}
+  a:hover {
+    color: #7f7f7f; }
+  a:visited {
+    color: #7f7f7f; }
+  a:visited:hover {
+    color: #7f7f7f; }
+  a[href^="http:"] {
+    text-decoration: underline dotted; }
+  a[href^="https:"] {
+    text-decoration: underline dotted; }
+
+dl dt {
+  font-weight: bold;
+}
+
+pre .operator,
+pre .paren {
+  color: #000000;
+}
+
+pre .literal {
+ color: #cd661d;
+}
+
+pre .number {
+ color: #cd661d;
+}
+
+pre .comment {
+ color: #7f7f7f;
+ font-style: italic
+}
+
+pre .keyword {
+ color: #900;
+ font-weight: bold
+}
+
+pre .identifier {
+ color: #000;
+}
+
+pre .string {
+ color: #458b00;
 }
 
 h1 {
@@ -190,58 +204,41 @@ h5, h6 {
   font-size: 16px;
 }
 
-a {
-  color: #7f7f7f;
-  text-decoration: underline dotted;
-}
-  a:hover {
-    color: #7f7f7f; }
-  a:visited {
-    color: #7f7f7f; }
-  a:visited:hover {
-    color: #7f7f7f; }
-  a[href^="http:"] {
-    text-decoration: underline dotted; }
-  a[href^="https:"] {
-    text-decoration: underline dotted; }
+#TOC {
+  clear: both;
+  margin: 0 0 10px 10px;
+  padding: 4px;
+  width: 400px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
 
-dl dt {
-  font-weight: bold;
+  background-color: #f6f6f6;
+  font-size: 13px;
+  line-height: 16px;
 }
 
+  #TOC .toctitle {
+    font-weight: bold;
+    font-size: 15px;
+    margin-left: 5px;
+  }
+  
+  #TOC ul {
+    padding-left: 40px;
+    margin-left: -1.5em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  #TOC ul ul {
+    margin-left: -2em;
+  }
+  
+  #TOC li {
+    line-height: 16px;
+  }
 
-pre .operator,
-pre .paren {
-  color: #000000;
-}
-
-pre .literal {
- color: #cd661d;
-}
-
-pre .number {
- color: #cd661d;
-}
-
-pre .comment {
- color: #7f7f7f;
- font-style: italic
-}
-
-pre .keyword {
- color: #900;
- font-weight: bold
-}
-
-pre .identifier {
- color: #000;
-}
-
-pre .string {
- color: #458b00;
-}
-
-
+/*
 @media print {
   * {
     background: transparent !important;
@@ -296,3 +293,4 @@ pre .string {
     page-break-after: avoid;
   }
 }
+*/
