@@ -1,18 +1,20 @@
 body, td {
   font-family: "Calibri";
-  !background-color: white; !this needs to be commented out for custom colors;
+  !background-color: white;
   font-size: 13px;
   !font: 11pt;
 }
 
 body {
-  font-family: Calibri;
+  font-family: "Calibri";
   color: #000000;
   font: 11pt;
   max-width: 55em;
   margin: auto;
   padding: 1em;
   !line-height: 20px;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 table {
@@ -117,7 +119,7 @@ img {
   box-shadow: 2px 2px 12px -5px #999999;
   margin: auto;
   max-width: 75em;
-  max-height: 75em;
+  !max-height: 75em;
 }
 
 a {
@@ -139,17 +141,19 @@ dl dt {
   font-weight: bold;
 }
 
-pre .operator,
+pre .operator {
+  color: #000000;
+}
 pre .paren {
   color: #000000;
 }
 
 pre .literal {
- color: #cd661d;
+ color: #1874cd;
 }
 
 pre .number {
- color: #cd661d;
+ color: #1874cd;
 }
 
 pre .comment {
@@ -158,16 +162,16 @@ pre .comment {
 }
 
 pre .keyword {
- color: #900;
- font-weight: bold
+ color: #1874cd;
+ font-weight: bold;
 }
 
 pre .identifier {
- color: #000;
+ color: #000000;
 }
 
 pre .string {
- color: #458b00;
+ color: #008b45;
 }
 
 h1 {
