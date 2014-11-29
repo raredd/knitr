@@ -1,0 +1,67 @@
+```{r knitr, include=FALSE}
+## package options
+library(knitr)
+opts_knit$set(eval.after = 'fig.cap', progress = TRUE, width = 80, 
+              verbose = TRUE, par = TRUE)
+
+opts_chunk$set(tidy = FALSE, echo = FALSE, cache = FALSE, warning = FALSE,
+               message = FALSE, dev = 'CairoPNG', dpi = 150, 
+               fig.align = 'center', dev.args = list(antialias = 'none',
+                                                     bg = 'transparent'))
+
+knit_hooks$set(par = function(before, options, envir) {
+                 if (before && options$fig.show != 'none') 
+                   par(mar = c(4,4,.1,.1), 
+                       cex.lab = .95,
+                       cex.axis = .9, 
+                       mgp = c(2,.7,0),
+                       tcl=-.3)
+                 },
+               plot = function(x, options) {
+                 fig_fn = paste0(opts_knit$get('base.url'),
+                                 paste(x, collapse = '.'))
+                 fig.cap <- knitr:::.img.cap(options)
+                 style = c('display:block',
+                           sprintf('margin: %s;',
+                                   switch(options$fig.align,
+                                          left = 'auto auto auto 0',
+                                          center = 'auto',
+                                          right = 'auto 0 auto auto')))
+                 addon_args <- ''
+                 fig_number_txt <- ''
+                 cntr <- getOption('figure_counter', FALSE)
+                 if (cntr != FALSE) {
+                   if (is.logical(cntr))
+                     cntr <- 1
+                   ## figure_counter_str allows for custom figure text, 
+                   ## eg, <b> Figure %s:</b>
+                   ## the %s allows for setting the counter manually to 1a, 1b, 
+                   ## etc if needed
+                   fig_number_txt <- 
+                     sprintf(getOption('figure_counter_str', 'Figure %s: '),
+                             ifelse(getOption('figure_counter_roman', FALSE),
+                                    as.character(as.roman(cntr)), 
+                                    as.character(cntr)))
+                   if (is.numeric(cntr))
+                     options(figure_counter = cntr + 1)
+                   }
+                 paste0("<figure><img src='", fig_fn, "'"," ", addon_args,
+                        paste0(" style='", paste(style, collapse = '; '), 
+                               "'"),'>',
+                        '<figcaption>', fig_number_txt, fig.cap, 
+                        '</figcaption></figure>')
+                 })
+
+## general settings
+# options(replace.assign=TRUE, width=68)
+options(figure_counter = FALSE,
+        figure_counter_roman = FALSE)
+
+## fonts for images
+library(Cairo)
+CairoFonts(regular = 'Calirbi:style=Regular',
+           bold = 'Calirbi:style=Bold',
+           italic = 'Calibri:style=Italic',
+           bolditalic = 'Calibri:style=Bold Italic,BoldItalic',
+           symbol = 'Symbol')
+```
